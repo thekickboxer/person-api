@@ -5,9 +5,12 @@ import one.digitalinnovation.personapi.dto.request.PersonDTO;
 import one.digitalinnovation.personapi.dto.response.MessageResponseDTO;
 import one.digitalinnovation.personapi.entity.Person;
 import one.digitalinnovation.personapi.exception.PersonNotFoundException;
+import one.digitalinnovation.personapi.exception.RestException;
 import one.digitalinnovation.personapi.mapper.PersonMapper;
 import one.digitalinnovation.personapi.repository.PersonRepository;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +27,10 @@ public class PersonService {
     public MessageResponseDTO createPerson(PersonDTO personDTO) {
 
         Person personToSave = personMapper.toModel(personDTO);
+
+        if(personRepository.findByCpf(personToSave.getCpf()) != null) {
+            RestException.lancar(HttpStatus.BAD_REQUEST, "Já existe uma pessoa usando esse CPF.");
+        }
 
         Person savedPerson = personRepository.save(personToSave);
 
