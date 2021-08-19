@@ -27,7 +27,7 @@ public class PersonService {
 
         Person savedPerson = personRepository.save(personToSave);
 
-        return createMessageResponse(savedPerson.getId(), "Created person with ID ");
+        return createMessageResponse(savedPerson.getId(), "Person successfully created with ID ");
 
     }
 
@@ -59,7 +59,7 @@ public class PersonService {
 
         Person updatedPerson = personRepository.save(personToUpdate);
 
-        return createMessageResponse(updatedPerson.getId(), "Updated person with ID ");
+        return createMessageResponse(updatedPerson.getId(), "Person successfully updated with ID ");
 
     }
 

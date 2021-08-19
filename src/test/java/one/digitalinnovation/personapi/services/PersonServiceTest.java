@@ -1,11 +1,12 @@
 package one.digitalinnovation.personapi.services;
 
-import one.digitalinnovation.personapi.dto.mapper.PersonMapper;
 import one.digitalinnovation.personapi.dto.request.PersonDTO;
 import one.digitalinnovation.personapi.dto.response.MessageResponseDTO;
-import one.digitalinnovation.personapi.entities.Person;
+import one.digitalinnovation.personapi.entity.Person;
 import one.digitalinnovation.personapi.exception.PersonNotFoundException;
-import one.digitalinnovation.personapi.repositories.PersonRepository;
+import one.digitalinnovation.personapi.mapper.PersonMapper;
+import one.digitalinnovation.personapi.repository.PersonRepository;
+import one.digitalinnovation.personapi.service.PersonService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,13 +19,8 @@ import java.util.Optional;
 
 import static one.digitalinnovation.personapi.utils.PersonUtils.createFakeDTO;
 import static one.digitalinnovation.personapi.utils.PersonUtils.createFakeEntity;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
@@ -43,10 +39,10 @@ public class PersonServiceTest {
         PersonDTO personDTO = createFakeDTO();
         Person expectedSavedPerson = createFakeEntity();
 
-        when(personMapper.toModel(personDTO)).thenReturn(expectedSavedPerson);
+        //when(personMapper.toModel(personDTO)).thenReturn(expectedSavedPerson);
         when(personRepository.save(any(Person.class))).thenReturn(expectedSavedPerson);
 
-        MessageResponseDTO successMessage = personService.create(personDTO);
+        MessageResponseDTO successMessage = personService.createPerson(personDTO);
 
         assertEquals("Person successfully created with ID 1", successMessage.getMessage());
     }
@@ -58,7 +54,7 @@ public class PersonServiceTest {
         expectedPersonDTO.setId(expectedSavedPerson.getId());
 
         when(personRepository.findById(expectedSavedPerson.getId())).thenReturn(Optional.of(expectedSavedPerson));
-        when(personMapper.toDTO(expectedSavedPerson)).thenReturn(expectedPersonDTO);
+        //LEOwhen(personMapper.toDTO(expectedSavedPerson)).thenReturn(expectedPersonDTO);
 
         PersonDTO personDTO = personService.findById(expectedSavedPerson.getId());
 
@@ -107,10 +103,10 @@ public class PersonServiceTest {
         expectedPersonToUpdate.setLastName(updatePersonDTORequest.getLastName());
 
         when(personRepository.findById(updatedPersonId)).thenReturn(Optional.of(expectedPersonUpdated));
-        when(personMapper.toModel(updatePersonDTORequest)).thenReturn(expectedPersonUpdated);
+        //when(personMapper.toModel(updatePersonDTORequest)).thenReturn(expectedPersonUpdated);
         when(personRepository.save(any(Person.class))).thenReturn(expectedPersonUpdated);
 
-        MessageResponseDTO successMessage = personService.update(updatedPersonId, updatePersonDTORequest);
+        MessageResponseDTO successMessage = personService.updateById(updatedPersonId, updatePersonDTORequest);
 
         assertEquals("Person successfully updated with ID 2", successMessage.getMessage());
     }
@@ -126,7 +122,7 @@ public class PersonServiceTest {
         when(personRepository.findById(invalidPersonId))
                 .thenReturn(Optional.ofNullable(any(Person.class)));
 
-        assertThrows(PersonNotFoundException.class, () -> personService.update(invalidPersonId, updatePersonDTORequest));
+        assertThrows(PersonNotFoundException.class, () -> personService.updateById(invalidPersonId, updatePersonDTORequest));
     }
 
     @Test
@@ -135,7 +131,7 @@ public class PersonServiceTest {
         Person expectedPersonToDelete = createFakeEntity();
 
         when(personRepository.findById(deletedPersonId)).thenReturn(Optional.of(expectedPersonToDelete));
-        personService.delete(deletedPersonId);
+        personService.deleteById(deletedPersonId);
 
         verify(personRepository, times(1)).deleteById(deletedPersonId);
     }
@@ -147,7 +143,7 @@ public class PersonServiceTest {
         when(personRepository.findById(invalidPersonId))
                 .thenReturn(Optional.ofNullable(any(Person.class)));
 
-        assertThrows(PersonNotFoundException.class, () -> personService.delete(invalidPersonId));
+        assertThrows(PersonNotFoundException.class, () -> personService.deleteById(invalidPersonId));
     }
 
 }

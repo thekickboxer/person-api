@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import one.digitalinnovation.personapi.dto.request.PersonDTO;
-import one.digitalinnovation.personapi.entities.Person;
+import one.digitalinnovation.personapi.entity.Person;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -23,7 +23,7 @@ public class PersonUtils {
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .cpf(CPF_NUMBER)
-                .birthDate("04-04-2010")
+                .birthDate("01/10/2010")
                 .phones(Collections.singletonList(PhoneUtils.createFakeDTO()))
                 .build();
     }

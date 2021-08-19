@@ -1,7 +1,7 @@
 package one.digitalinnovation.personapi.utils;
 
 import one.digitalinnovation.personapi.dto.request.PhoneDTO;
-import one.digitalinnovation.personapi.entities.Phone;
+import one.digitalinnovation.personapi.entity.Phone;
 import one.digitalinnovation.personapi.enums.PhoneType;
 
 public class PhoneUtils {
@@ -12,6 +12,7 @@ public class PhoneUtils {
 
     public static PhoneDTO createFakeDTO() {
         return PhoneDTO.builder()
+                .id(PHONE_ID)
                 .number(PHONE_NUMBER)
                 .type(PHONE_TYPE)
                 .build();

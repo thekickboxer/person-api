@@ -1,9 +1,10 @@
 package one.digitalinnovation.personapi.controllers;
 
+import one.digitalinnovation.personapi.controller.PersonController;
 import one.digitalinnovation.personapi.dto.request.PersonDTO;
 import one.digitalinnovation.personapi.dto.response.MessageResponseDTO;
 import one.digitalinnovation.personapi.exception.PersonNotFoundException;
-import one.digitalinnovation.personapi.services.PersonService;
+import one.digitalinnovation.personapi.service.PersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,10 +23,7 @@ import static one.digitalinnovation.personapi.utils.PersonUtils.asJsonString;
 import static one.digitalinnovation.personapi.utils.PersonUtils.createFakeDTO;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,7 +53,7 @@ public class PersonControllerTest {
         PersonDTO expectedPersonDTO = createFakeDTO();
         MessageResponseDTO expectedResponseMessage = createMessageResponse("Person successfully created with ID", 1L);
 
-        when(personService.create(expectedPersonDTO)).thenReturn(expectedResponseMessage);
+        when(personService.createPerson(expectedPersonDTO)).thenReturn(expectedResponseMessage);
 
         mockMvc.perform(post(PEOPLE_API_URL_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -116,7 +114,7 @@ public class PersonControllerTest {
         PersonDTO expectedPersonDTO = createFakeDTO();
         MessageResponseDTO expectedResponseMessage = createMessageResponse("Person successfully updated with ID", 1L);
 
-        when(personService.update(expectedValidId, expectedPersonDTO)).thenReturn(expectedResponseMessage);
+        when(personService.updateById(expectedValidId, expectedPersonDTO)).thenReturn(expectedResponseMessage);
 
         mockMvc.perform(put(PEOPLE_API_URL_PATH + "/" + expectedValidId)
                 .contentType(MediaType.APPLICATION_JSON)
